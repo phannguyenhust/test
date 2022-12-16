@@ -14,6 +14,7 @@ const listAccount = [
         password: "123456"
     },
 ]
+
 function addClass(selector, add){
     document.getElementById(selector).classList.add(add);
 }   
@@ -26,6 +27,10 @@ function showError(selector, message){
 function checkEmpty(selector){
     if(selector.value.trim() == "") return true;
 }
+function checkValidate(ID, borderError, inputError, message ){
+    addClass(ID, borderError);
+    showError(inputError, message);
+}
 //onlick button
 let element = document.getElementById("button");
 element.onclick = function login(e){
@@ -37,30 +42,22 @@ element.onclick = function login(e){
     let checkLogin = listAccount.some(value => value.email === email.value && value.password === password.value);
     //check email
     if(checkEmpty(email)){
-        addClass("email","formInputError");
-        showError("errorEmail","Chưa nhập email");
-        showError("errorBoth","");
+        checkValidate("email", "form-input-error", "errorEmail", "Chưa nhập email");
     }else if(!(email.value.match(regex))){
-        addClass("email","formInputError");
-        showError("errorEmail","Email không đúng định dạng");
-        showError("errorBoth","");  
+        checkValidate("email", "form-input-error", "errorEmail", "Email không đúng định dạng");
     }else{
         showError("errorEmail","");
-        removeClass("email","formInputError");
+        removeClass("email","form-input-error");
         checkEmail = true;
     }
     //check password
-    if(checkEmpty(password)){
-        addClass("password","formInputError");
-        showError("errorPassword","Chưa nhập password");
-        showError("errorBoth","");  
+    if(checkEmpty(password)){ 
+        checkValidate("password", "form-input-error", "errorPassword", "Chưa nhập password");
     }else if(password.value.length >20){
-        addClass("password","formInputError");
-        showError("errorPassword","Password không được nhập quá 20 ký tự");
-        showError("errorBoth","");
+        checkValidate("password", "form-input-error", "errorPassword", "Password không được nhập quá 20 ký tự");
     }else{
         showError("errorPassword","");
-        removeClass("password","formInputError");
+        removeClass("password","form-input-error");
         checkPass = true;
     }
     //check login thanh cong
@@ -74,8 +71,10 @@ element.onclick = function login(e){
                 window.location.href = "home.html"
             }, 500);
         }
-    }
-} 
+    }else{
+        removeClass("errorBoth","errorBoth");
+    } 
+}
 
 
 
