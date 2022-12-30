@@ -2,8 +2,8 @@
 require_once 'class.php';
   $checkEmail = true;
   $checkPass = true;
-  $emailU = 'ace@gmail.com';
-  $passU = 'demo123';
+  $emailFake = 'ace@gmail.com';
+  $passFake = 'demo123';
   $cookie_name = 'user';
   $arr = [];
   $borderError = 'style="border: 1px solid red"';
@@ -15,10 +15,15 @@ require_once 'class.php';
   function validateEmail($email){
     return filter_var($email, FILTER_VALIDATE_EMAIL);
   }
+  function duplicate($input, $var){
+    $input = new Validate($var);
+  }
+  
   if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['randcheck']==$_SESSION['rand'])
   {
     $email = $_POST["email"];
     $password = $_POST["password"];
+    
     //Email
     if (empty($email)) {
       // $emailShow = "Email khong duoc de trong";
@@ -49,7 +54,7 @@ require_once 'class.php';
     }
     //check correct
     if ($checkEmail && $checkPass) {
-      if (!($email == $emailU && $password == $passU)) {
+      if (!($email == $emailFake && $password == $passFake)) {
         $errorBoth = "Email hoặc mật khẩu không đúng";
       } else {
         $errorBoth = '';
@@ -60,8 +65,8 @@ require_once 'class.php';
         fwrite($fp, $tenDN);
         header('location: http://localhost/skill-repo-fixcookie/hello.php');
         if (isset($_POST['remember'])) {
-          $password = ($passU);
-          setcookie($cookie_name, 'email=' . $emailU . '&password=' . $passU, time() + 86400 * 30);
+          $password = ($passFake);
+          setcookie($cookie_name, 'email=' . $emailFake . '&password=' . $passFake, time() + 86400 * 30);
         }
       }
     } 
@@ -69,10 +74,8 @@ require_once 'class.php';
   //check cookie
   if (isset($_COOKIE[$cookie_name])) {
     parse_str($_COOKIE[$cookie_name], $arr);
-    if (($arr['email'] == $emailU) && ($arr['password'] == $passU)) {
+    if (($arr['email'] == $emailFake) && ($arr['password'] == $passFake)) {
       header('location: http://localhost/skill-repo-fixcookie/hello.php');
     }
   }
-  
- 
   ?>
